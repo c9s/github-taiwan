@@ -31,8 +31,12 @@ my @list =  qw(
             my $query_uri = "http://github.com/search?langOverride=&language=&q=location:$k&repo=&start_value=$page&type=Users";
             my $html = get( $query_uri );
 
-            my $retry = 10 unless $html ;
-            $html = get( $query_uri ), print "." while( ! $html && $retry );
+            my $retry = 5 unless $html ;
+            while( ! $html && $retry ) {
+                sleep 1;
+                print "." ;
+                $html = get( $query_uri );
+            }
 
             $page++;
             my $found_title;
@@ -65,8 +69,9 @@ for my $id ( @list ) {
 
     eval {
         my $response = get('http://github.com/api/v2/json/user/show/' . $id );
-        my $retry = 20 unless $response;
+        my $retry = 5 unless $response;
         while( ! $response && $retry-- ) {
+            sleep 1;
             print ".";
             $response = get('http://github.com/api/v2/json/user/show/' . $id );
         }
