@@ -3,63 +3,15 @@ use LWP::Simple;
 use JSON::XS;
 
 my @list =  qw(
-            audreyt 
-            clkao 
-            c9s 
-            gugod 
-            hlb
-            Dannvix
-            mrmoneyc
-            freehaha
-            BlueT
-            shelling
-            gslin
-            xdite
-            CindyLinz
-            RJKing
-            dryman
-            keitheis
-            drbean
-            bobchao
-            matrixneo
-            gdxhsw
-            darkhero
-            pct
-            zx1986
-            toomore
-            oobe
-            monoceroi
-            hcchien
-            medicalwei
-            aminzai
-            acelan
-            othree
-            EragonJ
-            penk
-            cclien
-            alicekey
-            zonble
-            PCMan
-            billy3321
-            chihchun
-            fourdollars
-            hychen
-            yurenju
-            appleboy
-            lukhnos
-            clsung
-            kanru
-            handlino
-            gaod
-            yrchen
-            ajneok
-            jeffhung
-            MLChen
-            tsung
-            ihower
-            ericsk);
-@list = sort @list;
+        audreyt clkao c9s gugod hlb Dannvix mrmoneyc freehaha BlueT shelling
+        gslin xdite CindyLinz RJKing dryman keitheis drbean bobchao matrixneo
+        gdxhsw darkhero pct zx1986 toomore oobe monoceroi hcchien medicalwei
+        aminzai acelan othree EragonJ penk cclien alicekey zonble PCMan
+        billy3321 chihchun fourdollars hychen yurenju appleboy lukhnos clsung
+        kanru handlino gaod yrchen ajneok jeffhung MLChen tsung ihower ericsk
+);
 
+@list = sort @list;
 $|++;
 @result = ();
 
