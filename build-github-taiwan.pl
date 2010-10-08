@@ -1,4 +1,6 @@
 #!/usr/bin/env perl
+use warnings;
+use strict;
 use LWP::Simple;
 use JSON::XS;
 
@@ -13,29 +15,30 @@ my @list =  qw(
 );
 
 
-@list = sort @list;
 $|++;
-@result = ();
+my @result = ();
 
+print "Found " . scalar(@list) . " developers\n";
 print "Gathering information...\n";
 for my $id ( @list ) {
     print $id , " ";
+    my $data;
 
     eval {
-
-        $response = get('http://github.com/api/v2/json/user/show/' . $id );
-        $retry = 3 unless $response;
-        
+        my $response = get('http://github.com/api/v2/json/user/show/' . $id );
+        my $retry = 10 unless $response;
         while( ! $response && $retry-- ) {
+            print ".";
             $response = get('http://github.com/api/v2/json/user/show/' . $id );
         }
-
         $data = decode_json( $response );
         $data = $data->{user};
-        push @result , $data;
     };
 
-    warn "ERROR!  " . $id . "  :  " . $@ if $@;
+    if ( $@ ) {
+        warn "ERROR!  " . $id . "  :  " . $@;
+    }
+    push @result , $data if $data;
 
 =pod
 
