@@ -1,4 +1,5 @@
 #!/usr/bin/env perl
+use feature ":5.10";
 use warnings;
 use strict;
 use LWP::Simple;
@@ -27,7 +28,12 @@ my @list =  qw(
         my $page = 1;
         while( $page ) {
             print "page $page: ";
-            my $html = get("http://github.com/search?langOverride=&language=&q=location:$k&repo=&start_value=$page&type=Users");
+            my $query_uri = "http://github.com/search?langOverride=&language=&q=location:$k&repo=&start_value=$page&type=Users";
+            my $html = get( $query_uri );
+
+            my $retry = 3 unless $html ;
+            $html = get( $query_uri ), print "." while( ! $html && $retry );
+
             $page++;
             my $found_title;
             pQuery($html)->find( 'h2' )->each( sub {
@@ -92,11 +98,13 @@ for my $id ( @list ) {
 
 }
 
-print "DONE\n";
+say "DONE";
 
 @result = sort { $b->{followers_count} <=> $a->{followers_count} } @result;
 
+say "Writing JSON...";
 open FH , ">" , "github-users.json";
 print FH encode_json( \@result );
 close FH;
+say "Done";
 
