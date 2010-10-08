@@ -26,7 +26,7 @@ my @list =  qw(
         print "searching $k\n";
         my $page = 1;
         while( $page ) {
-            print "page: $page\n";
+            print "page $page: ";
             my $html = get("http://github.com/search?langOverride=&language=&q=location:$k&repo=&start_value=$page&type=Users");
             $page++;
             my $found_title;
@@ -45,10 +45,10 @@ my @list =  qw(
             print "\n";
         }
     }
-    push @list, keys %users;
+    push @list, uniq(keys %users);
 }
 
-@list = sort uniq @list;
+@list = uniq sort @list;
 
 my @result = ();
 print "Found " . scalar(@list) . " developers\n";
@@ -99,3 +99,4 @@ print "DONE\n";
 open FH , ">" , "github-users.json";
 print FH encode_json( \@result );
 close FH;
+
