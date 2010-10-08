@@ -19,6 +19,7 @@ my @list =  qw(
 $|++;
 my @result = ();
 
+@list = sort @list;
 print "Found " . scalar(@list) . " developers\n";
 print "Gathering information...\n";
 for my $id ( @list ) {
