@@ -9,8 +9,9 @@ my @list =  qw(
         aminzai acelan othree EragonJ penk cclien alicekey zonble PCMan
         billy3321 chihchun fourdollars hychen yurenju appleboy lukhnos clsung
         kanru handlino gaod yrchen ajneok jeffhung MLChen tsung ihower ericsk
-        chiehwen
+        chiehwen itszero tsechingho hypo tzangms julian9 shepjeng dlackty deduce yllan
 );
+
 
 @list = sort @list;
 $|++;
