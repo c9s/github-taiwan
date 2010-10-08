@@ -31,7 +31,7 @@ my @list =  qw(
             my $query_uri = "http://github.com/search?langOverride=&language=&q=location:$k&repo=&start_value=$page&type=Users";
             my $html = get( $query_uri );
 
-            my $retry = 3 unless $html ;
+            my $retry = 10 unless $html ;
             $html = get( $query_uri ), print "." while( ! $html && $retry );
 
             $page++;
@@ -65,7 +65,7 @@ for my $id ( @list ) {
 
     eval {
         my $response = get('http://github.com/api/v2/json/user/show/' . $id );
-        my $retry = 10 unless $response;
+        my $retry = 20 unless $response;
         while( ! $response && $retry-- ) {
             print ".";
             $response = get('http://github.com/api/v2/json/user/show/' . $id );
