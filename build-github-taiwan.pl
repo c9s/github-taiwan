@@ -12,7 +12,7 @@ my @list =  qw(
         billy3321 chihchun fourdollars hychen yurenju appleboy lukhnos clsung
         kanru handlino gaod yrchen ajneok jeffhung MLChen tsung ihower ericsk
         chiehwen itszero tsechingho hypo tzangms julian9 shepjeng dlackty deduce yllan
-        kcliu timdream
+        kcliu timdream pixnet drakeguan lightlycat mose wmh spin
 );
 
 
