@@ -13,7 +13,7 @@
                             href: 'http://github.com/' + e.login ,
                             target: '_blank',
                             title: e.name
-                    }).html( e.login ) );
+                    }).html( e.login ) ).addClass( 'ident' );
                     return link;
                 }
 
@@ -36,7 +36,7 @@
 
                             if( e.followers_count == 0 ) {
                                 var link = mk_link(e);
-                                var node = $('<li/>').addClass('ident')
+                                var node = $('<li/>').addClass('person')
                                     .html( 
                                         $('<div/>').addClass('info')
                                         .append( link )
@@ -70,7 +70,7 @@
                             var fontSize = (e.followers_count / 12 ) + 36;
                             num.css({ fontSize: fontSize });
 
-                            var node = $('<li/>').addClass('ident').append( gravatar ).append( info );
+                            var node = $('<li/>').addClass('person').append( gravatar ).append( info );
                             node.append( num );
 
                             node.append( '<div style="clear:both;"> </div>' );
@@ -91,7 +91,7 @@
             }
             a:hover { text-decoration: underline; }
 
-            li.ident { 
+            li.person { 
                 padding: 3px 8px;
                 list-style: none;
                 border: 1px solid #ccc;
