@@ -14,10 +14,30 @@
                     dataType: 'json',
                     success: function(list) {
 
+                        var count = 1;
+
                         $('#namelist').empty();
                         $(list).map( function(i,e) {
                             if(!e) 
                                 return;
+
+                            if( e.public_repo_count == 0 )
+                                return;
+
+                            if( e.followers_count == 0 ) {
+                                var node = $('<li/>').addClass('ident')
+                                    .html( 
+                                        $('<div/>').addClass('info')
+                                        .append( '<div>' + (e.login||"&nbsp;") + '</div>' )
+                                        .append( '<div>' + (e.name ||"&nbsp;") + '</div>' )
+                                        .append( '<div>' + (e.email||"&nbsp;") + '</div>' )
+                                        .append( '<div>' + (e.blog ||"&nbsp;") + '</div>' )
+                                    );
+                                node.append( '<div style="clear:both;"> </div>' );
+                                $('#namelist').append(node);
+                                return;
+                            }
+
 
                             var link = $('<div/>').html( $('<a/>').attr({ 
                                     href: 'http://github.com/' + e.login ,
@@ -37,7 +57,16 @@
                                 .append( '<div>Follower: ' + e.followers_count + '</div>')
                                 .append( '<div>Repositories: ' + e.public_repo_count + '</div>')
                                 ;
+
+                            var num  = $('<div/>').addClass('number').html( count++ );
+
+                            // var num  = $('<div/>').addClass('number')..html( e.followers_count );
+
+                            var fontSize = (e.followers_count / 12 ) + 36;
+                            num.css({ fontSize: fontSize });
+
                             var node = $('<li/>').addClass('ident').append( gravatar ).append( info );
+                            node.append( num );
 
                             node.append( '<div style="clear:both;"> </div>' );
                             $('#namelist').append(node);
@@ -65,6 +94,7 @@
                 display: inline;
                 float: left;
                 margin: 5px 3px;
+                position: relative;
             }
             li:hover { background: #eee; }
 
@@ -75,6 +105,7 @@
                 font-size: 12px;
             }
 
+            .number { position: absolute; top: 0px; right: 10px; color: #eee; }
             .info,
             .gravatar {
                 /* float:left; */
