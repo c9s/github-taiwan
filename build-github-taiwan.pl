@@ -81,6 +81,7 @@ for my $id ( @list ) {
 
     if ( $@ ) {
         warn "ERROR!  " . $id . "  :  " . $@;
+        next;
     }
     push @result , $data if $data;
 
