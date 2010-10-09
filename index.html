@@ -36,7 +36,7 @@
 
                             if( e.followers_count == 0 ) {
                                 var link = mk_link(e);
-                                var node = $('<li/>').addClass('person')
+                                var node = $('<li/>').addClass('person-small')
                                     .html( 
                                         $('<div/>').addClass('info')
                                         .append( link )
@@ -92,6 +92,19 @@
             a:hover { text-decoration: underline; }
 
             li.person { 
+                padding: 3px 3px;
+                list-style: none;
+                border: 1px solid #ccc;
+                width: 200px;
+                display: inline;
+                float: left;
+                margin: 5px 3px;
+                position: relative;
+                height: 210px;
+            }
+            li:hover { background: #eee; }
+
+            li.person-small { 
                 padding: 3px 8px;
                 list-style: none;
                 border: 1px solid #ccc;
@@ -100,10 +113,10 @@
                 float: left;
                 margin: 5px 3px;
                 position: relative;
-                height: 200px;
+                height: 90px;
             }
-            li:hover { background: #eee; }
 
+            .ident { font-size: 24px; }
             .gravatar { margin: 10px; }
             .info {  
                 margin: 10px; 
