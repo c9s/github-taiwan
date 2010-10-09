@@ -8,6 +8,16 @@
             $(function() {
 
 
+                function mk_link(e) {
+                    var link = $('<div/>').html( $('<a/>').attr({ 
+                            href: 'http://github.com/' + e.login ,
+                            target: '_blank',
+                            title: e.name
+                    }).html( e.login ) );
+                    return link;
+                }
+
+
                 $.ajax({
                     url: 'github-users.json',
                     method: 'get',
@@ -25,10 +35,11 @@
                                 return;
 
                             if( e.followers_count == 0 ) {
+                                var link = mk_link(e);
                                 var node = $('<li/>').addClass('ident')
                                     .html( 
                                         $('<div/>').addClass('info')
-                                        .append( '<div>' + (e.login||"&nbsp;") + '</div>' )
+                                        .append( link )
                                         .append( '<div>' + (e.name ||"&nbsp;") + '</div>' )
                                         .append( '<div>' + (e.email||"&nbsp;") + '</div>' )
                                         .append( '<div>' + (e.blog ||"&nbsp;") + '</div>' )
@@ -38,13 +49,7 @@
                                 return;
                             }
 
-
-                            var link = $('<div/>').html( $('<a/>').attr({ 
-                                    href: 'http://github.com/' + e.login ,
-                                    target: '_blank',
-                                    title: e.name
-                            }).html( e.login ) );
-
+                            var link = mk_link(e);
                             var gravatar = $('<img/>').addClass('gravatar').attr({ 
                                 title: e.name,
                                 alt:  e.name,
