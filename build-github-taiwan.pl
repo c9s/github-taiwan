@@ -71,7 +71,7 @@ for my $id ( @list ) {
         my $response = get('http://github.com/api/v2/json/user/show/' . $id );
         my $retry = 5 unless $response;
         while( ! $response && $retry-- ) {
-            sleep 1;
+            sleep 5;
             print ".";
             $response = get('http://github.com/api/v2/json/user/show/' . $id );
         }
