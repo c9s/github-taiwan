@@ -5,6 +5,7 @@ use strict;
 use LWP::Simple;
 use JSON::XS;
 use List::MoreUtils qw(uniq);
+use pQuery;
 
 my @list =  qw(
         audreyt clkao c9s gugod hlb Dannvix mrmoneyc freehaha BlueT shelling
@@ -18,9 +19,7 @@ my @list =  qw(
 );
 
 {
-    use LWP::Simple;
-    use pQuery;
-    my @keywords = qw(Taiwan Taipei Tainan Taichung);
+    my @keywords = qw(Taiwan Taipei Tainan Taichung Kaohsiung);
     my %users;
     $|++;
     for my $k ( @keywords ) {
@@ -55,7 +54,7 @@ my @list =  qw(
             print "\n";
         }
     }
-    push @list, uniq(keys %users);
+    push @list, keys %users;
 }
 
 @list = uniq sort @list;

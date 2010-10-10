@@ -36,14 +36,26 @@
 
                             if( e.followers_count == 0 ) {
                                 var link = mk_link(e);
+
+                                var info = $('<div/>').addClass('info')
+                                        .append( link );
+                                if(e.name)
+                                    info.append( '<div class="name">' + e.name + '</div>' );
+
+                                if(e.email)
+                                    info.append( '<div class="email">' + e.email + '</div>' );
+
+                                if(e.blog)
+                                    info.append( '<div class="blog">' + e.blog + '</div>' );
+
+                                if(e.company)
+                                    info.append( '<div class="company">' + e.company + '</div>' );
+
+                                if(e.location)
+                                    info.append( '<div class="location">' + e.location + '</div>' );
+
                                 var node = $('<li/>').addClass('person-small')
-                                    .html( 
-                                        $('<div/>').addClass('info')
-                                        .append( link )
-                                        .append( '<div>' + (e.name ||"&nbsp;") + '</div>' )
-                                        .append( '<div>' + (e.email||"&nbsp;") + '</div>' )
-                                        .append( '<div>' + (e.blog ||"&nbsp;") + '</div>' )
-                                    );
+                                    .html( info );
                                 node.append( '<div style="clear:both;"> </div>' );
                                 $('#namelist').append(node);
                                 return;
