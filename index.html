@@ -42,15 +42,6 @@
                                 if(e.name)
                                     info.append( '<div class="name">' + e.name + '</div>' );
 
-                                if(e.email)
-                                    info.append( '<div class="email">' + e.email + '</div>' );
-
-                                if(e.blog)
-                                    info.append( '<div class="blog">' + e.blog + '</div>' );
-
-                                if(e.company)
-                                    info.append( '<div class="company">' + e.company + '</div>' );
-
                                 if(e.location)
                                     info.append( '<div class="location">' + e.location + '</div>' );
 
@@ -69,11 +60,25 @@
 
                             // http://github.com/users/follow?target=naoya
                             var info = $('<div/>').addClass( 'info' )
-                                .append( link )
-                                .append( '<div>' + (e.name || '&nbsp;' )  + '</div>' )
-                                .append( '<div>Follower: ' + e.followers_count + '</div>')
-                                .append( '<div>Repositories: ' + e.public_repo_count + '</div>')
-                                ;
+                                .append( link );
+
+                            if(e.name)
+                                info.append( '<div class="name">' + e.name + '</div>' );
+
+                            if(e.email)
+                                info.append( '<div class="email">' + e.email + '</div>' );
+
+                            if(e.blog)
+                                info.append( '<div class="blog">' + e.blog + '</div>' );
+
+                            if(e.company)
+                                info.append( '<div class="company">' + e.company + '</div>' );
+
+                            if(e.location)
+                                info.append( '<div class="location">' + e.location + '</div>' );
+
+                            info.append( '<div>Follower: ' + e.followers_count + '</div>');
+                            info.append( '<div>Repositories: ' + e.public_repo_count + '</div>');
 
                             var num  = $('<div/>').addClass('number').html( count++ );
 
@@ -117,7 +122,7 @@
                 float: left;
                 margin: 12px 9px;
                 position: relative;
-                height: 210px;
+                height: 220px;
             }
             li:hover { background: #eee; }
 
