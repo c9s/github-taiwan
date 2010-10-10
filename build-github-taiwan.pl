@@ -18,6 +18,10 @@ my @list =  qw(
         kcliu timdream pixnet drakeguan lightlycat mose wmh spin
 );
 
+my $c_w = decode_json(get('http://github.com/api/v2/json/repos/show/c9s/github-taiwan/watchers'));
+my $c_n = decode_json(get('http://github.com/api/v2/json/repos/show/c9s/github-taiwan/network'));
+push @list,((map { $_->{'owner'}  } @{ $c_n->{network} }), (@{ $c_w->{watchers} }));
+
 {
     my @keywords = qw(Taiwan Taipei Tainan Taichung Kaohsiung);
     my %users;
