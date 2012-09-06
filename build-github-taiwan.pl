@@ -3,6 +3,7 @@ use feature ":5.10";
 use warnings;
 use strict;
 use LWP::Simple;
+use HTTP::Request::Common;
 use JSON::XS;
 use List::MoreUtils qw(uniq);
 use pQuery;
@@ -18,18 +19,19 @@ my @list =  qw(
         kcliu timdream pixnet drakeguan lightlycat mose wmh spin
 );
 
-my $c_w = decode_json(get('http://github.com/api/v2/json/repos/show/c9s/github-taiwan/watchers'));
-my $c_n = decode_json(get('http://github.com/api/v2/json/repos/show/c9s/github-taiwan/network'));
-push @list,((map { $_->{'owner'}  } @{ $c_n->{network} }), (@{ $c_w->{watchers} }));
+# my $c_w = {}; #decode_json(get('http://github.com/api/v3/json/repos/show/c9s/github-taiwan/subscribers'));
+# my $c_n = {}; # decode_json(get('http://github.com/api/v3/json/repos/show/c9s/github-taiwan/forks'));
+# push @list,((map { $_->{'owner'}  } @{ $c_n->{network} }), (@{ $c_w->{watchers} }));
 
 {
-    my @keywords = qw(Taiwan Taipei Tainan Taichung Kaohsiung);
+    my @locations = qw(Taiwan Taipei Tainan Taichung Kaohsiung Hsinchu);
     my %users;
+    my $max_pages = 6;
     $|++;
-    for my $k ( @keywords ) {
+    for my $k ( @locations ) {
         print "searching $k\n";
         my $page = 1;
-        while( $page ) {
+        while( $page && $page <= $max_pages ) {
             print "page $page: ";
             my $query_uri = "http://github.com/search?langOverride=&language=&q=location:$k&repo=&start_value=$page&type=Users";
             my $html = get( $query_uri );
@@ -63,45 +65,58 @@ push @list,((map { $_->{'owner'}  } @{ $c_n->{network} }), (@{ $c_w->{watchers} 
 
 @list = uniq sort @list;
 
+
+my $ua = LWP::UserAgent->new;
+$ua->default_header( Accept => 'application/vnd.github.full+json' );
+
 my @result = ();
 print "Found " . scalar(@list) . " developers\n";
 print "Gathering information...\n";
 for my $id ( @list ) {
     print $id , " ";
     my $data;
-
+    my $response;
     eval {
-        my $response = get('http://github.com/api/v2/json/user/show/' . $id );
+        # curl -L https://api.github.com/users/c9s -H "Accept: application/vnd.github.full+json"
+        $response = $ua->request( GET 'https://api.github.com/users/' . $id );
         my $retry = 5 unless $response;
         while( ! $response && $retry-- ) {
             sleep 5;
             print ".";
-            $response = get('http://github.com/api/v2/json/user/show/' . $id );
+            $response = $ua->request( GET 'https://api.github.com/users/' . $id );
         }
-        $data = decode_json( $response );
-        $data = $data->{user};
+        $data = decode_json( $response->decoded_content );
     };
-
     if ( $@ ) {
         warn "ERROR!  " . $id . "  :  " . $@;
+        warn $response->decoded_content;
         next;
     }
     push @result , $data if $data;
 
 =pod
 
-    user:
-        id: 23
-        login: defunkt
-        name: Kristopher Walken Wanstrath
-        company: LA
-        location: SF
-        email: me@email.com
-        blog: http://myblog.com
-        following_count: 13
-        followers_count: 63
-        public_gist_count: 0
-        public_repo_count: 2
+{
+  "following": 608,
+  "type": "User",
+  "blog": "http://c9s.me",
+  "location": "Taipei, Taiwan",
+  "gravatar_id": "7490b4e3e9cb85a1f7dc0c8ea01a86e5",
+  "public_repos": 211,
+  "hireable": true,
+  "bio": "Perl, C, C++, JavaScript, PHP, Haskell, Ruby, HTML5",
+  "login": "c9s",
+  "avatar_url": "https://secure.gravatar.com/avatar/7490b4e3e9cb85a1f7dc0c8ea01a86e5?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png",
+  "created_at": "2009-02-01T15:20:08Z",
+  "company": "",
+  "email": "cornelius.howl@gmail.com",
+  "url": "https://api.github.com/users/c9s",
+  "public_gists": 286,
+  "followers": 344,
+  "name": "Yo-An Lin",
+  "html_url": "https://github.com/c9s",
+  "id": 50894
+}
 
 =cut
 
@@ -109,11 +124,10 @@ for my $id ( @list ) {
 
 say "DONE";
 
-@result = sort { $b->{followers_count} <=> $a->{followers_count} } @result;
+@result = sort { $b->{followers} <=> $a->{followers} } @result;
 
 say "Writing JSON...";
 open FH , ">" , "github-users.json";
 print FH encode_json( \@result );
 close FH;
 say "Done";
-

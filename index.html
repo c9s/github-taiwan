@@ -31,10 +31,10 @@
                             if(!e) 
                                 return;
 
-                            if( e.public_repo_count == 0 )
+                            if( e.public_repos == 0 )
                                 return;
 
-                            if( e.followers_count == 0 ) {
+                            if( e.followers == 0 ) {
                                 var link = mk_link(e);
 
                                 var info = $('<div/>').addClass('info')
@@ -78,14 +78,14 @@
                                 info.append( '<div class="location">' + e.location + '</div>' );
                             */
 
-                            info.append( '<div>Follower: ' + e.followers_count + '</div>');
-                            info.append( '<div>Repositories: ' + e.public_repo_count + '</div>');
+                            info.append( '<div>Follower: ' + e.followers + '</div>');
+                            info.append( '<div>Repositories: ' + e.public_repos + '</div>');
 
                             var num  = $('<div/>').addClass('number').html( count++ );
 
                             // var num  = $('<div/>').addClass('number')..html( e.followers_count );
 
-                            var fontSize = (e.followers_count / 12 ) + 36;
+                            var fontSize = (e.followers / 12 ) + 36;
                             num.css({ fontSize: fontSize });
 
                             var node = $('<li/>').addClass('person').append( gravatar ).append( info );
