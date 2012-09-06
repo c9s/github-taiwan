@@ -36,7 +36,6 @@
 
                             if( e.followers == 0 ) {
                                 var link = mk_link(e);
-
                                 var info = $('<div/>').addClass('info')
                                         .append( link );
                                 if(e.name)
@@ -64,19 +63,14 @@
 
                             if(e.name)
                                 info.append( '<div class="name">' + e.name + '</div>' );
-
                             if(e.email)
                                 info.append( '<div class="email">' + e.email + '</div>' );
-
                             if(e.blog)
                                 info.append( '<div class="blog">' + e.blog + '</div>' );
-
-                            /*
                             if(e.company)
                                 info.append( '<div class="company">' + e.company + '</div>' );
                             if(e.location)
                                 info.append( '<div class="location">' + e.location + '</div>' );
-                            */
 
                             info.append( '<div>Follower: ' + e.followers + '</div>');
                             info.append( '<div>Repositories: ' + e.public_repos + '</div>');
