@@ -81,7 +81,7 @@ for my $id ( @list ) {
         $response = $ua->request( GET 'https://api.github.com/users/' . $id );
         my $retry = 5 unless $response;
         while( ! $response && $retry-- ) {
-            sleep 5;
+            sleep 10;
             print ".";
             $response = $ua->request( GET 'https://api.github.com/users/' . $id );
         }
@@ -92,7 +92,9 @@ for my $id ( @list ) {
         warn $response->decoded_content;
         next;
     }
-    push @result , $data if $data;
+    sleep 3;
+
+    push @result , $data if $data && $data->{followers};
 
 =pod
 
