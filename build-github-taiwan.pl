@@ -124,7 +124,7 @@ for my $id ( @list ) {
 
 say "DONE";
 
-@result = sort { $b->{followers} <=> $a->{followers} } @result;
+@result = sort { $b->{followers} <=> $a->{followers} } map { $_->{followers} ||= 0 } @result;
 
 say "Writing JSON...";
 open FH , ">" , "github-users.json";
