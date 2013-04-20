@@ -39,7 +39,7 @@ my @list =  qw(
 
             my $html = get( $query_uri );
             my $retry = 3 unless $html ;
-            while( ! $html && $retry ) {
+            while( ! $html && $retry-- ) {
                 sleep 5;
                 print "Retry $retry...\n";
                 $html = get( $query_uri );
@@ -124,7 +124,7 @@ for my $id ( @list ) {
 
 say "DONE";
 
-@result = sort { $b->{followers} <=> $a->{followers} } map { $_->{followers} ||= 0 } @result;
+@result = sort { $b->{followers} <=> $a->{followers} } @result;
 
 say "Writing JSON...";
 open FH , ">" , "github-users.json";

@@ -4,10 +4,7 @@
         <title>Taiwan Developers on Github</title>
         <script type="text/javascript" charset="utf-8" src="jquery-1.4.2.js"></script>
         <script type="text/javascript" charset="utf-8">
-
             $(function() {
-
-
                 function mk_link(e) {
                     var link = $('<div/>').html( $('<a/>').attr({ 
                             href: 'http://github.com/' + e.login ,
@@ -17,76 +14,83 @@
                     return link;
                 }
 
+                var count = 0;
+
+                function build_card(e) {
+                    if (!e) {
+                        return;
+                    }
+
+                    if( e.public_repos == 0 )
+                        return;
+
+                    if( e.followers == 0 ) {
+                        var link = mk_link(e);
+                        var info = $('<div/>').addClass('info')
+                                .append( link );
+                        if(e.name)
+                            info.append( '<div class="name">' + e.name + '</div>' );
+
+                        if(e.location)
+                            info.append( '<div class="location">' + e.location + '</div>' );
+
+                        var node = $('<li/>').addClass('person-small')
+                            .html( info );
+                        node.append( '<div style="clear:both;"> </div>' );
+                        $('#namelist').append(node);
+                        return;
+                    }
+
+                    var link = mk_link(e);
+                    var gravatar = $('<img/>').addClass('gravatar').attr({ 
+                        title: e.name,
+                        alt:  e.name,
+                        src: 'http://www.gravatar.com/avatar/' + e.gravatar_id + '?s=96' }).css({ });
+
+                    // http://github.com/users/follow?target=naoya
+                    var info = $('<div/>').addClass( 'info' )
+                        .append( link );
+
+                    if(e.name)
+                        info.append( '<div class="name">' + e.name + '</div>' );
+                    if(e.email)
+                        info.append( '<div class="email">' + e.email + '</div>' );
+                    if(e.blog)
+                        info.append( '<div class="blog">' + e.blog + '</div>' );
+                    if(e.company)
+                        info.append( '<div class="company">' + e.company + '</div>' );
+                    if(e.location)
+                        info.append( '<div class="location">' + e.location + '</div>' );
+
+                    info.append( '<div>Follower: ' + e.followers + '</div>');
+                    info.append( '<div>Repositories: ' + e.public_repos + '</div>');
+
+                    var num  = $('<div/>').addClass('number').html( count++ );
+
+                    // var num  = $('<div/>').addClass('number')..html( e.followers_count );
+
+                    var fontSize = (e.followers / 12 ) + 36;
+                    num.css({ fontSize: fontSize });
+
+                    var node = $('<li/>').addClass('person').append( gravatar ).append( info );
+                    node.append( num );
+
+                    node.append( '<div style="clear:both;"> </div>' );
+                    return node;
+                }
+
 
                 $.ajax({
                     url: 'github-users.json',
                     method: 'get',
                     dataType: 'json',
                     success: function(list) {
-
-                        var count = 1;
-
                         $('#namelist').empty();
                         $(list).map( function(i,e) {
-                            if(!e) 
-                                return;
-
-                            if( e.public_repos == 0 )
-                                return;
-
-                            if( e.followers == 0 ) {
-                                var link = mk_link(e);
-                                var info = $('<div/>').addClass('info')
-                                        .append( link );
-                                if(e.name)
-                                    info.append( '<div class="name">' + e.name + '</div>' );
-
-                                if(e.location)
-                                    info.append( '<div class="location">' + e.location + '</div>' );
-
-                                var node = $('<li/>').addClass('person-small')
-                                    .html( info );
-                                node.append( '<div style="clear:both;"> </div>' );
+                            var node = build_card(e);
+                            if ( node ) {
                                 $('#namelist').append(node);
-                                return;
                             }
-
-                            var link = mk_link(e);
-                            var gravatar = $('<img/>').addClass('gravatar').attr({ 
-                                title: e.name,
-                                alt:  e.name,
-                                src: 'http://www.gravatar.com/avatar/' + e.gravatar_id + '?s=96' }).css({ });
-
-                            // http://github.com/users/follow?target=naoya
-                            var info = $('<div/>').addClass( 'info' )
-                                .append( link );
-
-                            if(e.name)
-                                info.append( '<div class="name">' + e.name + '</div>' );
-                            if(e.email)
-                                info.append( '<div class="email">' + e.email + '</div>' );
-                            if(e.blog)
-                                info.append( '<div class="blog">' + e.blog + '</div>' );
-                            if(e.company)
-                                info.append( '<div class="company">' + e.company + '</div>' );
-                            if(e.location)
-                                info.append( '<div class="location">' + e.location + '</div>' );
-
-                            info.append( '<div>Follower: ' + e.followers + '</div>');
-                            info.append( '<div>Repositories: ' + e.public_repos + '</div>');
-
-                            var num  = $('<div/>').addClass('number').html( count++ );
-
-                            // var num  = $('<div/>').addClass('number')..html( e.followers_count );
-
-                            var fontSize = (e.followers / 12 ) + 36;
-                            num.css({ fontSize: fontSize });
-
-                            var node = $('<li/>').addClass('person').append( gravatar ).append( info );
-                            node.append( num );
-
-                            node.append( '<div style="clear:both;"> </div>' );
-                            $('#namelist').append(node);
                         });
 
                         $('#namelist').append( '<div style="clear:both;"> </div>' );
