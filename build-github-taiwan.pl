@@ -2,6 +2,7 @@
 use feature ":5.10";
 use warnings;
 use strict;
+use URI::Encode qw(uri_encode);
 use LWP::Simple;
 use HTTP::Request::Common;
 use JSON::XS;
@@ -32,29 +33,28 @@ my @list =  qw(
         print "searching $k\n";
         my $page = 1;
         while( $page && $page <= $max_pages ) {
+            my $query_uri = "http://github.com/search?q=" . uri_encode("location:$k") . "&p=$page&type=Users&s=followers";
+            print $query_uri, "\n";
             print "page $page: ";
-            my $query_uri = "http://github.com/search?langOverride=&language=&q=location:$k&repo=&start_value=$page&type=Users";
-            my $html = get( $query_uri );
 
-            my $retry = 5 unless $html ;
+            my $html = get( $query_uri );
+            my $retry = 3 unless $html ;
             while( ! $html && $retry ) {
-                sleep 1;
-                print "." ;
+                sleep 5;
+                print "Retry $retry...\n";
                 $html = get( $query_uri );
             }
 
             $page++;
             my $found_title;
-            pQuery($html)->find( 'h2' )->each( sub {
-                    my $i = shift;
-                    my $class = $_->getAttribute('class');
-
-                    $found_title = 1 if $class && $class =~ /title/;
-                    return unless( $class );
-
-                    my $ident = pQuery($_)->find('a')->text;
-                    $users{ $ident } = 1 if $ident;
-                    print $ident . " " if $ident;
+            pQuery($html)->find( '.user-list-info' )->each( sub {
+                my $i = shift;
+                my $ident = pQuery($_)->find('a:first-child')->text;
+                if ( $ident ) {
+                    $users{ $ident } = 1;
+                    print $ident . " ";
+                    $found_title = 1;
+                }
             });
             $page = 0 unless $found_title;
             print "\n";
