@@ -93,8 +93,7 @@ for my $id ( @list ) {
         next;
     }
     sleep 3;
-
-    push @result , $data if $data && $data->{followers};
+    push @result ,$data;
 
 =pod
 
