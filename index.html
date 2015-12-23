@@ -46,7 +46,8 @@
                     var gravatar = $('<img/>').addClass('gravatar').attr({ 
                         title: e.name,
                         alt:  e.name,
-                        src: 'http://www.gravatar.com/avatar/' + e.gravatar_id + '?s=96' }).css({ });
+                        src: e.avatar_url 
+                    });
 
                     // http://github.com/users/follow?target=naoya
                     var info = $('<div/>').addClass( 'info' )
