@@ -44,9 +44,11 @@
 
                     var link = mk_link(e);
                     var gravatar = $('<img/>').addClass('gravatar').attr({ 
-                        title: e.name,
-                        alt:  e.name,
-                        src: e.avatar_url 
+                        "title": e.name,
+                        "alt":  e.name,
+                        "src": e.avatar_url,
+                        "width": 120,
+                        "height": 120
                     });
 
                     // http://github.com/users/follow?target=naoya
